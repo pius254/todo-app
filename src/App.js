@@ -23,6 +23,17 @@ function todosReducer(state, action) {
         (todo) => todo.id !== action.payload.id
       );
       return { ...state, todos: filteredTodoState };
+    case "edit":
+      const updatedToDo = { ...action.payload };
+      const updatedToDoIndex = state.todos.findIndex(
+        (t) => t.id === action.payload.id
+      );
+      const updatedToDos = [
+        ...state.todos.slice(0, updatedToDoIndex),
+        updatedToDo,
+        ...state.todos.slice(updatedToDoIndex + 1),
+      ];
+      return { ...state, todos: updatedToDos };
     default:
       return todosInitialState;
   }

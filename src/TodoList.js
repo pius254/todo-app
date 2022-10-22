@@ -6,10 +6,19 @@ function ToDoList() {
   // receive state and dispatch from index.js
   const { state, dispatch } = useContext(TodosContext);
   const [todoText, setTodoText] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [editTodo, setEditTodo] = useState(null);
+  const buttonTitle = editMode ? "Edit" : "Add";
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch({ type: "add", payload: todoText });
+    if (editMode) {
+      dispatch({ type: "edit", payload: { ...editTodo, text: todoText } });
+      setEditMode(false);
+      setEditTodo(null);
+    } else {
+      dispatch({ type: "add", payload: todoText });
+    }
     setTodoText(""); // to clear field after adding
   };
   return (
@@ -23,7 +32,7 @@ function ToDoList() {
           />
         </Form.Group>
         <Button variant="primary" type="submit">
-          Submit
+          {buttonTitle}
         </Button>
       </Form>
 
@@ -39,7 +48,15 @@ function ToDoList() {
           {state.todos.map((todo) => (
             <tr key={todo.id}>
               <td>{todo.text}</td>
-              <td>Edit</td>
+              <td
+                onClick={() => {
+                  setTodoText(todo.text);
+                  setEditMode(true);
+                  setEditTodo(todo);
+                }}
+              >
+                Edit
+              </td>
               <td onClick={() => dispatch({ type: "delete", payload: todo })}>
                 Delete
               </td>
