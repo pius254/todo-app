@@ -20,7 +20,9 @@ function ToDoList() {
             <tr key={todo.id}>
               <td>{todo.text}</td>
               <td>Edit</td>
-              <td>Delete</td>
+              <td onClick={() => dispatch({ type: "delete", payload: todo })}>
+                Delete
+              </td>
             </tr>
           ))}
         </tbody>
