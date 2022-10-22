@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import { v4 as uuidv4 } from "uuid";
 import ToDoList from "./TodoList";
 
 const todosInitialState = {
@@ -11,6 +12,12 @@ const todosInitialState = {
 
 function todosReducer(state, action) {
   switch (action.type) {
+    case "add":
+      const newToDo = { id: uuidv4(), text: action.payload };
+      // add new todo onto array
+      const addedToDos = [...state.todos, newToDo];
+      // spread our state and assign todos
+      return { ...state, todos: addedToDos };
     case "delete":
       const filteredTodoState = state.todos.filter(
         (todo) => todo.id !== action.payload.id
